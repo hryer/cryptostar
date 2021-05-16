@@ -14,7 +14,9 @@ contract StarNotary is ERC721 {
     // Implement Task 1 Add a name and symbol properties
     // name: Is a short name to your token
     // symbol: Is a short string like 'USD' -> 'American Dollar'
-    
+    constructor() public ERC721("Fallen Star Token", "FLST");
+    // string public constant name = "Fallen Star Token";
+    // string public constant symbol = "FLST";
 
     // mapping the Star with the Owner Address
     mapping(uint256 => Star) public tokenIdToStarInfo;
@@ -57,6 +59,7 @@ contract StarNotary is ERC721 {
     // Implement Task 1 lookUptokenIdToStarInfo
     function lookUptokenIdToStarInfo (uint _tokenId) public view returns (string memory) {
         //1. You should return the Star saved in tokenIdToStarInfo mapping
+        return tokenIdToStarInfo[_tokenId];
     }
 
     // Implement Task 1 Exchange Stars function
@@ -65,12 +68,21 @@ contract StarNotary is ERC721 {
         //2. You don't have to check for the price of the token (star)
         //3. Get the owner of the two tokens (ownerOf(_tokenId1), ownerOf(_tokenId1)
         //4. Use _transferFrom function to exchange the tokens.
+        string memory ownerToken1 = ownerOf(_tokenId1);
+        string memory ownerToken2 = ownerOf(_tokenId2);
+
+        require(_isApprovedOrOwner(msg.sender, ownerToken1) || _isApprovedOrOwner(msg.sender,ownerToken2), "You cant exchange star you dont owned");
+        _transferFrom(ownerToken1, ownerToken2, _tokenId1);
+        _transferFrom(ownerToken2, ownerToken1, _tokenId2);
     }
 
     // Implement Task 1 Transfer Stars
     function transferStar(address _to1, uint256 _tokenId) public {
         //1. Check if the sender is the ownerOf(_tokenId)
         //2. Use the transferFrom(from, to, tokenId); function to transfer the Star
+        require(_isApprovedOrOwner(msg.sender, _tokenId), "You dont owned the star");
+        _transferFrom(msg.sender, _to1, _tokenId);
+
     }
 
 }
