@@ -112,7 +112,6 @@ it('lookUptokenIdToStarInfo test', async () => {
 	let instance = await StarNotary.deployed();
 	let tokenId1 = 97;
 	await instance.createStar('Harry Star!', tokenId1, { from: accounts[0] });
-	assert.equal(await instance.tokenIdToStarInfo.call(tokenId1), 'Harry Star!');
-
+    console.log(await instance.lookUptokenIdToStarInfo(tokenId1))
 	assert.equal(await instance.lookUptokenIdToStarInfo(tokenId1), 'Harry Star!');
 });
